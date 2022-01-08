@@ -1,2 +1,6 @@
 # flip-text-single-element
- testing for flip board
+ Testing element animation for retro flip board. 
+
+The large board and message editing is ready for use.
+This is to develop and refine the timing and animation of the flip characters
+

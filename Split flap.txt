@@ -1,6 +1,4 @@
-Well, this has SUCKED to develop.
 
-The animation screws up one thing or another. 
 
 There are 4 elements:
 
@@ -19,7 +17,7 @@ There are 4 elements:
 	If I animate the flap to flip down correctly, the backside is NEVER able to rotate the letter and display correctly. 
 
 
-There are several CodePens to this effect: Flip Card 1-5. Each having a different experiment. 
+I have several CodePens to this effect: Flip Card 1-5. Each having a different experiment. 
 
 I'm moving on to a simpler idea. 
 

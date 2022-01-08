@@ -12,7 +12,7 @@ $(".button.one").click(function() {
  
 
 
-window.total_characters = 10
+window.total_characters = 7
 step = 0
 
 function activateFlip( stringy) { 
