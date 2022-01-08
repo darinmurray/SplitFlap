@@ -32,3 +32,6 @@ resetting border box and flip animation
 HUB divs were commented out in html
 .flap transition origen changed
 all :before and :after pseudo elements commented out
+
+Working well, slow motion the flip to see where the final small glitch is.
+(hubs are swinging to the top of top flap when rotating)

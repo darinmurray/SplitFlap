@@ -217,7 +217,7 @@ h1 .hub {
 /* ========= Center GAP effect ======== */ 
 
 /* top: Xpx; set for both separately, SEE BELOW */
-/* .back:before, .element:before {
+.back:before, .element:before {
     content: '';
     position: absolute;
     left: 0;
@@ -225,18 +225,19 @@ h1 .hub {
     height: 3px;
     background: rgba(0, 0, 0, .7);
     box-shadow: 0 1px 2px 0 rgba(255, 255, 255, .4);
-}  */
+} 
 /* <-- for the front */
-/* .element:before { 
+.element:before { 
     top: 50%;
-}  */
+    z-index: 999;
+} 
 /* <-- for the back */
-/* .back:before {    
+.back:before {    
     top: 1px;  
-}  */
+} 
 
 /* ========= bottom STACK effect ======== */
-/* .element:after {
+.element:after {
     content: '';
     position: absolute;
     left: 0; 
@@ -245,7 +246,7 @@ h1 .hub {
     height: 2px;
     background: rgba(0, 0, 0, .5);
     box-shadow: 0 1px 2px 0 rgba(255, 255, 255, .2);
-}  */
+} 
 
 
 
