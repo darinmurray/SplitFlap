@@ -141,9 +141,8 @@ $( ".button.two" ).click(function() {
 });  
 
 $( ".button.three" ).click(function() { 
- current_string = "xxxxxxxxxxx"
-  step = 0
-  console.log("current_string now set to " + current_string)  
+ flipText("XXXXXXXXXX");
+  console.log("current_string now set to XXXXXXXX" )  
 }); 
 
  $( ".button.four" ).click(function() { 
