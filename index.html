@@ -1,0 +1,81 @@
+<!-- WORKING VERSION with number flipping and  -->
+<!-- Working sequencial flip  -->
+<!-- flip ramp is counting DOWN now   -->
+<!--    -->
+<!--    -->
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@500&display=swap" rel="stylesheet">
+
+
+<p>forked from 3, clicking simultaneous elements instead of one at a time</p>
+<!-- On the panel display, wrapps all elements -->
+<div id="display_board_X" class="display_board_container board"> </div> 
+
+<!--  -->
+<div id="pos_1_" class="element  " style="display:none">
+  <div class="top_back_shadow"></div>
+  <!--   box shadow INSide does nothign here, as the .card is in front of it -->
+  <h1>
+    <div class="top">7</div>
+    <div class="shadow"></div>
+    <div class="hub">
+      <div></div><!--  empty container for hubs -->
+      <div></div>
+    </div>
+    <div class="bottom">7</div>
+  </h1>
+
+  <div class="flap ">
+    <div class="front item ">
+      <div class="hub">
+        <div></div><!--  empty container for hubs -->
+        <div></div>
+      </div>
+      <h1>7</h1>
+    </div>
+    <div class="back">
+      <div class="hub">
+        <div></div>
+        <div></div>
+      </div>
+      <h1>
+      <!--  doesn't actually need a starting character -->
+      </h1>
+    </div>    
+  </div><!-- end .flap -->
+
+
+</div><!-- END .element flip char item -->
+
+
+
+<div class="button_row">
+<div class="button one shadow-pulse">Flip single Element</div>
+<div class="button two">Slot Machine Flips</div>
+<div class="button three">Clear Me</div>
+<!-- <div class="button" onclick="flip(event)">.. </div>  -->
+</div>
+<div class="button_row">
+<div class="button four">Reload Page</div>
+</div>
+
+
+<em>Working Decently. But sequencial instead of asynchronosly. 
+</em>
+<p> investigate rounding the corners, panels are too sharp on transition
+</p>
+
+<p> .back { border-bottom: 1px solid white; <<==animate this so it's like a gleaming edge </br>
+</p>
+
+<p>showing of the 'back' as the 'front' flips down is not working in Safari
+</p>
+
+
+<p>change @shine keyframes to slightly delay the startm, and speed up toward the end
+</p>
+
+<div class=" " style="width: 800px; height:200px; background-image: url(https://www.oatfoundry.com/wp-content/uploads/2019/10/IPL_200919_3629_LR.jpg);"></div> 

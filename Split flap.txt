@@ -1,0 +1,28 @@
+Well, this has SUCKED to develop.
+
+The animation screws up one thing or another. 
+
+There are 4 elements:
+
+
+1) The top hidden flap: next letter to be displayed
+
+	2) Bottom hidden flap: next letter being displayed (bottom half) hidden, until flipped
+	This is placed absolute, on the BACK of the (3) Top Shown flap and is rotated 180 deg
+	so it flips down correctly to display the bottom half of the next character, upright.
+
+3) The Top shown flap: current letter being displayed (top half)
+
+4) The Bottom shown flap: current letter being displayed (bottom half)
+
+#2 is the problem. 
+	If I animate the flap to flip down correctly, the backside is NEVER able to rotate the letter and display correctly. 
+
+
+There are several CodePens to this effect: Flip Card 1-5. Each having a different experiment. 
+
+I'm moving on to a simpler idea. 
+
+The screen will fill with X rows (vw/min 10, max 50) and x cols (vw/min 10, max 50)
+
+Responsive to screen size, and Larger/Smaller sliding input. 
