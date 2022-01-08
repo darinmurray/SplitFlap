@@ -42,7 +42,7 @@ function change_character_w_pos( step, stringy ) {
   // this is the main timing variable. 
   // All others are calculated from this one
   // if timing never changes, coudl all be done in css
-  timing = 2    // 2 is fast, 20 is slow
+  timing = 2    // 2 is fast, 20 is slow // Strangly, the slower this flips, the less accurate it is in changing the letters on the board
    
   $(position+" .flap").css( { // flips the top panel
                     "transform" : "rotateX(-180deg)", 
@@ -51,7 +51,8 @@ function change_character_w_pos( step, stringy ) {
         "transition-duration" : (timing/14).toFixed(2)+"s",  
            "transition-delay" : "0s" 
   });
-  
+ 
+  // ==>> it does NOT work without the two animations below
     $(position+" .top_back_shadow").css( { // adds shadow to the bottom half when top flipped over it
                     "opacity" : "0", 
           "transition-property" : "opacity",
@@ -68,7 +69,8 @@ function change_character_w_pos( step, stringy ) {
         "transition-duration" : (timing/57).toFixed(2)+"s",    // 35   
            "transition-delay" : (timing/44).toFixed(2)+"s"     // 45.  
   });
-  
+ 
+// ==>> it works about the same without the two animations below
 // replaces the .shiny class on 'front'; animates the shine as it flips
 $(position+" .front").css( { // Shines top panel
              "background" : "linear-gradient(178deg,#0000 5%,rgba(255,255,255,0.3) 50%,#0000 96%) rgba(50,50,50,1)",
@@ -83,17 +85,41 @@ $(position+" .back").css( { // Shines top panel
                "animation" : "shineBack "+(timing/4).toFixed(2)+"s 1"  // /4 default was 0.5  
  });
 
+ // ==>> Mandatory for functionality
 // 1. => Probably needs to be on transitionENd for slow motion transitions   
-$( position+" .back h1" ).text( rando );  
-$( position+" .top" ).text( rando );
+// $( position+" .back h1" ).text( rando );  
+// $( position+" .top" ).text( rando );
+
+// NEW on TRANSITION END functions to replace timeout below... 
+// $(position+' .shadow').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',   
+ //  function(e) {
+ //     $(position+" .front h1" ).text( rando ); 
+ //     $(position+" .bottom" ).text( rando ); // this was in a setTimeout with delay: container_h1_delay*2
+ // })
+ 
+// ==> the function below replace the 10 lines of code above. I believe it's good to replace
+// ==> BUT, .back h1 and .top MIGHT need to be on a different transition end. 
 
 // NEW on TRANSITION END functions to replace timeout below... 
 $(position+' .shadow').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',   
   function(e) {
      $(position+" .front h1" ).text( rando ); 
      $(position+" .bottom" ).text( rando ); // this was in a setTimeout with delay: container_h1_delay*2
+     $( position+" .back h1" ).text( rando );  
+    $( position+" .top" ).text( rando );
   })
  
+
+
+
+
+
+
+
+
+
+
+
 //  .front and .back are webkitAnimationEnd oanimationend msAnimationEnd animationend 
 //  .top_back_shadow, .shadow, .flap are webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend  
 
@@ -136,13 +162,14 @@ setTimeout(function ( ) {
 
 
 $( ".button.two" ).click(function() { 
- strings = ["TESTING","DARIN MURRAY","ERIN MORRIS","PIPER MAE","LUCKY DOG","KITTEN THE CAT"]
-  flipText(strings[getRandomInt(0, 5)]);
-});  
+  strings = ["TESTING","DARIN MURRAY","ERIN MORRIS","PIPER MAE","LUCKY DOG","KITTEN THE CAT"]
+   flipText(strings[getRandomInt(0, 5)]);
+ });  
 
 $( ".button.three" ).click(function() { 
- flipText("XXXXXXXXXX");
-  console.log("current_string now set to XXXXXXXX" )  
+ current_string = "xxxxxxxxxxx"
+  step = 0
+  console.log("current_string now set to " + current_string)  
 }); 
 
  $( ".button.four" ).click(function() { 
