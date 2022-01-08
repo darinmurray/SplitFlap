@@ -136,7 +136,8 @@ setTimeout(function ( ) {
 
 
 $( ".button.two" ).click(function() { 
- flipText("DarinRocks");
+ strings = ["TESTING","DARIN MURRAY","ERIN MORRIS","PIPER MAE","LUCKY DOG","KITTEN THE CAT"]
+  flipText(strings[getRandomInt(0, 5)]);
 });  
 
 $( ".button.three" ).click(function() { 

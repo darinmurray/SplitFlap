@@ -23,4 +23,12 @@ I'm moving on to a simpler idea.
 
 The screen will fill with X rows (vw/min 10, max 50) and x cols (vw/min 10, max 50)
 
-Responsive to screen size, and Larger/Smaller sliding input. 
+Responsive to screen size, and Larger/Smaller sliding input.
+
+
+1/8/22
+resetting border box and flip animation
+
+HUB divs were commented out in html
+.flap transition origen changed
+all :before and :after pseudo elements commented out

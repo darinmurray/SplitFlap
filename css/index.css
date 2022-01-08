@@ -1,7 +1,8 @@
 :root { font-size:16px; }
 body { font-family: 'Azeret Mono', monospace; 
-html, body {margin:0; padding:0;} 
 }
+html, body {margin:0; padding:0;} 
+
 
 *, *::before, *::after { box-sizing: border-box; /* gives padding and border from inside */
 }
@@ -120,7 +121,8 @@ background: linear-gradient(180deg, rgba(50,50,50,1) 0%, rgba(68,68,68,1) 20%, r
   width: 100px; 
   height: 65px;
   transform-style: preserve-3d;  
-  transform-origin: 0% 99.5%;
+  /* transform-origin: 0% 99.5%; */
+  transform-origin: 0% 100%;
 }
 
 .front, .back { 
@@ -128,7 +130,10 @@ background: linear-gradient(180deg, rgba(50,50,50,1) 0%, rgba(68,68,68,1) 20%, r
   position: absolute;
   overflow:hidden; 
 }
-
+.front, .back{
+  height:61px;
+  width: 90px;
+}
 .back {    
   transform: rotateX(-180deg);
   opacity: 1; /* Is this needed? */
@@ -203,25 +208,28 @@ h1 .hub {
 
 
 /* ========= Center GAP effect ======== */ 
-.back:before, .element:before {
+
+/* top: Xpx; set for both separately, SEE BELOW */
+/* .back:before, .element:before {
     content: '';
     position: absolute;
     left: 0;
     right: 0;
     height: 3px;
-    /* top: Xpx; set for both separately, SEE BELOW */
     background: rgba(0, 0, 0, .7);
     box-shadow: 0 1px 2px 0 rgba(255, 255, 255, .4);
-} 
-.element:before { /* <-- for the front */
+}  */
+/* <-- for the front */
+/* .element:before { 
     top: 50%;
-} 
-.back:before {    /* <-- for the back */
+}  */
+/* <-- for the back */
+/* .back:before {    
     top: 1px;  
-} 
+}  */
 
 /* ========= bottom STACK effect ======== */
-.element:after {
+/* .element:after {
     content: '';
     position: absolute;
     left: 0; 
@@ -230,7 +238,7 @@ h1 .hub {
     height: 2px;
     background: rgba(0, 0, 0, .5);
     box-shadow: 0 1px 2px 0 rgba(255, 255, 255, .2);
-} 
+}  */
 
 
 
