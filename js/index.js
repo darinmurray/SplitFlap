@@ -1,526 +1,232 @@
 
-$(".button.one").click(function() { 
-  // change_character()
- //        step++
- //        //setTimeout(function ( ) {  
- //        change_character_w_pos(step) 
- //        //}, 200);   
- //        if (step>=total_characters) {step = 0 }
- //        console.log(step)
-  activateFlip()
-});
+// Fired when document is ready, wrapps everything  
+window.onload = function() { 
  
-
-
-window.total_characters = 6
-step = 0
-
-function activateFlip( stringy) { 
-  // change_character()
-  // console.log("activateFlip starting step: "+step)
-  
-          //setTimeout(function ( ) { 
-    if (!stringy) {stringy = "-------------"}
-    change_character_w_pos(step, stringy) 
-       //}, 200);   
-    if (step >= total_characters) {step = 0 }
-  step++
-  // console.log("activateFlip step(at end): "+step) 
-  // console.log("stringy in activateFlip: "+stringy)
-};
-
-
- 
-
-  
-function change_character_w_pos( step, stringy ) { 
-  position = "#pos_1_"+(step)// already incremented in the function variable
-  //console.clear()
-  //console.log("stringy in change_character: "+stringy)
-  // get/insert char here, rando for dev
-  rando = stringy[step-1] //String.fromCharCode(65+Math.floor(Math.random() * 26));  
-  // this is the main timing variable. 
-  // All others are calculated from this one
-  // if timing never changes, coudl all be done in css
-  timing = 2    // 2 is fast, 20 is slow // Strangly, the slower this flips, the less accurate it is in changing the letters on the board
+  window.total_characters = 36
+    
    
-  $(position+" .flap").css( { // flips the top panel
-                    "transform" : "rotateX(-180deg)", 
-          "transition-property" : "transform",
-   "transition-timing-function" : "linear",
-        "transition-duration" : (timing/14).toFixed(2)+"s",  
-           "transition-delay" : "0s" 
+  // ===============  S P E E D  ================ // 
+  // ===============  (sliders)  ================ // 
+  // ===============  =========  ================ //  
+  // Length of time to change all characters in the string - set default value
+  let speed_slider = document.getElementById("message_speed_slider")
+  window.user_message_speed = speed_slider.value;
+  // Update the current slider value (each time you drag the slider handle)
+  speed_slider.oninput = function(e) {
+    // update the HTML   
+    var x = this.min;
+    var y = this.max;
+    posNum = getPercentOfRange(x, this.value, y)
+    negNum = (1.0 - posNum).toFixed(1)
+  
+    // This is nice/reuseable on multiple elements without change 
+    // if the dom is fixed, but if the HTML changes, you are screwed
+    // this.parentElement.previousElementSibling.style.opacity=posNum; //"slower"
+    // this.parentElement.nextElementSibling.style.opacity=negNum; /// "faster"
+    
+    document.querySelector(".message_speed_container .slower").style.opacity=posNum;
+    document.querySelector(".message_speed_container .faster").style.opacity=negNum;    
+    // update global variable for display function
+    window.user_message_speed = this.value;  
+  }  
+  
+  
+    
+  // ====== get % of # between min & max of a given range ========= //
+  // E.G. from 35 to 356, what percentage (of the range) is 121? 
+   function getPercentOfRange(min, current, max) {  
+     // change *1 to *100 for whole numbers
+     // currently returning opacity 0.1 - 1.0
+     return percentage = (((current - min) * 1) / (max - min)).toFixed(1);  
+   } 
+    
+  // =======   Generate a Random Int between min & max   ========== //
+  // getRandomInt(1, 10)*100   for increments less than one second
+   function getRandomInt(min, max) { 
+     return Math.round((min - 0.5) + Math.random() * (max - min + 1));
+   }
+   
+    
+    
+    
+    
+    
+    
+    
+    
+  // character flip duration  
+  //var flip_speed_slider = document.getElementById("flip_speed_slider");
+  //var flip_speed_output = document.getElementById("flip_speed").childNodes[1];
+  //let user_flip_speed = document.getElementById("flip_speed_slider").value;
+  // Display the default slider value
+  // document.getElementById("flip_speed").childNodes[1].innerHTML = user_flip_speed 
+  
+  // Update the current slider value (each time you drag the slider handle)
+  // HOW IS THIS WORKING ????? flip_speed_slider is NOT declared anywhere?
+  flip_speed_slider.oninput = function() { 
+    // update the HTML   
+    var x = this.min;
+    var y = this.max;
+    posNum = getPercentOfRange(x, this.value, y)
+    negNum = (1.0 - posNum).toFixed(1)
+  
+    // This is nice/reuseable on multiple elements without change 
+    // if the dom is fixed, but if the HTML changes, you are screwed
+    // this.parentElement.previousElementSibling.style.opacity=posNum; //"slower"
+    // this.parentElement.nextElementSibling.style.opacity=negNum; /// "faster" 
+    document.querySelector(".flip_speed_container .slower").style.opacity=posNum;
+    document.querySelector(".flip_speed_container .faster").style.opacity=negNum;    
+    
+    // ***** update the variable in  CSS:root ********
+    //https://stackoverflow.com/questions/37801882/how-to-change-css-root-color-variables-in-javascript
+    document.documentElement.style.setProperty('--timing', this.value/100+'s');
+  }  
+   
+  
+    
+    
+    
+    
+  // ===============  F L I P P I N G  ================ // 
+  // ===============     (function)    ================ // 
+  // ===============  ===============  ================ //  
+    
+  $(".button").click(function() { 
+    flipCharacters()
+  });  
+  
+  function getString(){
+  let strings = ["DADA IS THE BEST!!","ERIN MORRIS, DANCING QUEEN IS IN CALIFORNIA VISITING HER DADA ","PIPER MAE LOVES PINK :-)","LUCKY DOG IS REALLY A LUCKY DOG AND GETS","KITTEN THE CAT LIKES TO GET UP EARLY"]
+  
+  // let strings = ["DADA IS THE BEST DADA!!","ERIN MORRIS, DANCING QUEEN IS IN CALIFORNIA VISITING HER DADA ","PIPER MAE LOVES PINK AND UNICORNS AND AND FLUFFY THINGS OF ALL KINDS","LUCKY DOG IS REALLY A LUCKY DOG AND GETS TO SLEEP IN THE BED","KITTEN THE CAT LIKES TO GET UP EARLY AND WAKE US UP FOR BREAKFAST"]
+  
+  return stringy = strings[getRandomInt(0, 4)]
+  }
+  
+  function flipCharacters(){ 
+  stringy = getString()   
+  //console.log(user_flip_speed)
+   $('div.element').each(function(index) {
+     var thisElement = this;
+     var howMany = $('div.element').length; 
+     var ranNum = Math.floor(Math.random() * user_message_speed); 
+     // setup the interval and give it a name to clear later 
+     var flipThis = setInterval(function() {
+  
+       // ********************************************* 
+       // console.log("speed is: "+user_flip_speed+" at index: "+index) 
+          var nextChar = stringy[index]
+          if (nextChar == undefined || nextChar == ''){ nextChar = " "}
+          // add the transition class to current item in the each/array
+          $(thisElement).find(".flap").addClass('flipped')     
+          $(thisElement).find(" .top_back_shadow").addClass('flipped')// transition 
+          $(thisElement).find(" .shadow").addClass('flipped')         // transition
+          $(thisElement).find(" .front").addClass('flipped')          // ANIMATION    
+          $(thisElement).find(" .back_shine").addClass('flipped')     // ANIMATION on back as flipped down
+          $(thisElement).find(" .back h1" ).text( nextChar )          // update character component
+          $(thisElement).find(" .top" ).text( nextChar )              // update character component  
+              // change character component and remove .flipped on the current item after transitionEnd
+              $(thisElement).find(".flap").on('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',
+                function(e) {
+                  //$(this).find(".flap").removeClass("flipped");
+                  $(thisElement).find(".flap").removeClass("flipped");
+                  // find 'this's children with class 
+                  $(thisElement).find(" .front").removeClass('flipped');
+                  $(thisElement).find(" .back_shine").removeClass('flipped');
+                  $(thisElement).find(" .front h1" ).text( nextChar );   
+                  // these two shadows happen OUTSIDE of .flap, up a level inside .element  
+                  // so, use jquery .parent()
+                  $(thisElement).parent().find(" .shadow").removeClass('flipped'); 
+                  $(thisElement).parent().find(" .top_back_shadow").removeClass('flipped')    
+                  $(thisElement).parent().find(" .bottom" ).text( nextChar ); 
+              }); 
+       // *********************************************
+       // clear interval if index has surpased #of elements
+       index<=howMany ? window.clearInterval(flipThis) : ""
+      }, ranNum); 
   });
- 
-  // ==>> it does NOT work without the two animations below
-    $(position+" .top_back_shadow").css( { // adds shadow to the bottom half when top flipped over it
-                    "opacity" : "0", 
-          "transition-property" : "opacity",
-   "transition-timing-function" : "ease-in",
-        "transition-duration" : (timing/20).toFixed(2)+"s",    // lower # is slower   
-           "transition-delay" : (timing/80).toFixed(2)+"s"     // lower # is slower 
-  });
-
+   
+  }; // end of flipEach() 
+    
+   
+    
+    
+    
+    
+  // ===============  I N I T I A L I Z E  ================ // 
+  // ===============  (render x elements)  ================ // 
+  // ===============  = { in the html } =  ================ //  
   
-  $(position+" .shadow").css( { // adds shadow to the bottom half when top flipped over it
-                    "opacity" : "1", 
-          "transition-property" : "opacity",
-   "transition-timing-function" : "ease-in-out",
-        "transition-duration" : (timing/57).toFixed(2)+"s",    // 35   
-           "transition-delay" : (timing/44).toFixed(2)+"s"     // 45.  
-  });
- 
-// ==>> it works about the same without the two animations below
-// replaces the .shiny class on 'front'; animates the shine as it flips
-$(position+" .front").css( { // Shines top panel
-             "background" : "linear-gradient(178deg,#0000 5%,rgba(255,255,255,0.3) 50%,#0000 96%) rgba(50,50,50,1)",
-        "background-size" : "100% 400%",
-              "animation" : "shineFront "+(timing/40).toFixed(2)+"s 1" // default was 0.5       
-});
- 
-// replaces the .shiny class on 'back/bottom' animates the shine as it flips
-$(position+" .back").css( { // Shines top panel 
-              "background" : "linear-gradient(178deg,#0000 5%,rgba(255,255,255,0.3) 50%,#0000 96%) rgba(50,50,50,1)",
-         "background-size" : "100% 400%", 
-               "animation" : "shineBack "+(timing/4).toFixed(2)+"s 1"  // /4 default was 0.5  
- });
-
- // ==>> Mandatory for functionality
-// 1. => Probably needs to be on transitionENd for slow motion transitions   
-// $( position+" .back h1" ).text( rando );  
-// $( position+" .top" ).text( rando );
-
-// NEW on TRANSITION END functions to replace timeout below... 
-// $(position+' .shadow').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',   
- //  function(e) {
- //     $(position+" .front h1" ).text( rando ); 
- //     $(position+" .bottom" ).text( rando ); // this was in a setTimeout with delay: container_h1_delay*2
- // })
- 
-// ==> the function below replace the 10 lines of code above. I believe it's good to replace
-// ==> BUT, .back h1 and .top MIGHT need to be on a different transition end. 
-
-// NEW on TRANSITION END functions to replace timeout below... 
-$(position+' .shadow').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',   
-  function(e) {
-     $(position+" .front h1" ).text( rando ); 
-     $(position+" .bottom" ).text( rando ); // this was in a setTimeout with delay: container_h1_delay*2
-     $( position+" .back h1" ).text( rando );  
-    $( position+" .top" ).text( rando );
-  })
- 
-
-
-
-
-
-
-
-
-
-
-
-//  .front and .back are webkitAnimationEnd oanimationend msAnimationEnd animationend 
-//  .top_back_shadow, .shadow, .flap are webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend  
-
-// <=========. THIS WORKS, MOSTLY. TRYING WITH THE * ALL SELECTOR BELWO
-// $(position+' .back').one('webkitAnimationEnd oanimationend msAnimationEnd animationend',
-//     function(e) { // this ALMOST works... but nto if clicks are fast
-//     $(position+" .back, "+position+" .front, "+position+" .flap, "+position+" .bottom, "+position+" .shadow, "+position+" .top_back_shadow").removeAttr("style");
-//   // console.log("executed after .back Animation end")
-// });
-
+  // Get from random array until form is filled out
+  user_input = getString() 
   
-// <=========. THIS WORKS, same as above
-//   $(position+' .back').one('webkitAnimationEnd oanimationend msAnimationEnd animationend',
-//     function(e) { // this ALMOST works... but nto if clicks are fast
-//     $(position+" *").removeAttr("style");
-//   // console.log("executed after .back Animation end")
-// });
-
-// <=========. trying the above with timeout instead of AnimationEnd
-// <=========. this actually works best!?!?!?!
-setTimeout(function ( ) {  
-  $(position+" *").removeAttr("style");
-}, 200); // 100
-  
-  
-  
-  
-};  // END of change_character function
-
-
-
-
-
-
-
-
-
-
-
-
-
-$( ".button.two" ).click(function() { 
-  strings = ["DADA  ","ERIN MORRIS","PIPER MAE","LUCKY DOG","KITTEN THE CAT"]
-   flipText(strings[getRandomInt(0, 4)]);
- });  
-
-$( ".button.three" ).click(function() { 
- current_string = "xxxxxxxxxxx"
-  step = 0
-  console.log("current_string now set to " + current_string)  
-}); 
-
- $( ".button.four" ).click(function() { 
- flipText("WorkingNow");
-});  
-
-
-
-
-
-function getRandomInt(min, max) {
-  // min/max for the length of time the character is flipping before stopping 
-  return Math.round((min - 0.5) + Math.random() * (max - min + 1));
-}
- 
-function flipText( string_sent ) {
-// for (let stepX = 0; stepX <= total_characters; stepX++) {  
-  console.clear()
-    // min flip interval
-    var interval = 50;  // 50
-    // the #by which "interval" gets devided by, 
-    // thereby speedin it up.
-    var incrementalFactor = 0.1 // 0.2    
-    // console.log( incrementalFactor ) 
-    timer = function() {
-                        interval+=Math.floor(interval*incrementalFactor);   
-                        //do your thing here
-                        // $(".button").click(); // initiate flip character function, NOT click button 
-                        
-                              // if (interval >= incrementalFactor) {  
-                              //   // alert(" interval is "+interval) 
-                              //   new_text = "ABCDEF" 
-                              // } else {
-                              //   new_text = "123456"
-                              // } 
-                    console.log("STEP/Char BEFORE activate is: "+step)
-                              //current_string = "DarinRocks" 
-                              activateFlip( string_sent ) // (spin, stringy) 
-                    // console.log("===========interval is: "+interval)
-                              if (interval <= 400) { // 400 //incrementalFactor, lower number ends faster
-                                setTimeout(timer, interval);
-                                console.log("After If: "+interval)
-                                // console.log("interval after IF is: "+interval)
-                              }
-                        };
-    timer(); // call the timer function to flip the characters
-// };  // End FOR loop
-
-
-}; //end FUNCTION
-
-
-
-
-
-
-
-
-// make this an array so I can call specific strings
-//total_characters = 5
-
-
-// replace this function in the master file
-function render_characters( user_input ){
-    // ***** LOG console.log("=== begin RENDER_CHARACTERS function");
-    // 1. Renders each slot & fills with character from array 
-    for (let step = 0; step < total_characters; step++) {
-      initial_character = user_input[step] //string_arr[step] 
+  // replace this function in the master file
+  function renderCharacters( user_input ){
+      // 1. Renders each slot & fills with character from array  
+      for (let step = 0; step < total_characters; step++) {
+        initial_character = user_input[step] //string_arr[step] 
         // This is JUST a placeholder for initial rendering of panel
         // <== step through array of the default string initial_string
         if (initial_character == undefined || initial_character == ''){ initial_character = " "}
-      // 2.  # of possible .class_X options for random look
-      class_option =  Math.floor(Math.random() * 4); 
-      // 3.  append single character to HTML      
-      // now using the *CLONE* method
-            // copy the original HTML markup for the element to replicate
-            var clone = $("#pos_1_").clone();
-            var newId = clone.attr("id")+(step+1);
-            
-            clone.attr("id", newId).removeAttr("style");
-            // INSIDE the clone, find and change this 
-            clone.find(".front h1").text( initial_character );
-            clone.find(".top, .bottom, .front h1").text( initial_character ); 
-            // add position class and random background/shadows classes
-            clone.addClass(" pos_1_"+(step+1)+ " background_"+class_option + " shadows_"+class_option);     
-            // BRILLIANT!!!!
-            //append clones on the end till done
-            $("#display_board_X").append(clone)   
-    
-  
-    }  // end FOR 
-   // ***** LOG console.log("=== end RENDER_CHARACTERS function"); 
-}; // ====== end of Render_Characters ====== //
- 
-
-// put the characters on screen
-
-// Fired when document is ready  
-window.onload = function() {
-    render_characters( "" )
-}
+        // 2.  # of possible .class_X options for random look
+        class_option =  Math.floor(Math.random() * 4); 
+        // 3.  append single character to HTML      
+              // clone the original HTML markup for the element to replicate
+              var clone = $("#pos_1_").clone();
+              var newId = clone.attr("id")+(step+1);
+              clone.attr("id", newId).removeAttr("style");
+              // INSIDE the clone, find and change this 
+              clone.find(".front h1").text( initial_character );
+              clone.find(".top, .bottom, .front h1").text( initial_character ); 
+              // add position class and random background/shadows classes
+              // Shadows need to be from a reversed(_R) set of shadows for this positioning
+              clone.find(".back").addClass("background_"+class_option+" shadows_R"+class_option); 
+              clone.find(".bottom").addClass("background_"+class_option+" shadows_R"+class_option); 
+              clone.find(".top").addClass("shadows_R"+class_option); // testing
+              clone.find(".front").addClass("shadows_R"+class_option); // testing 
+              clone.addClass("pos_1_"+(step+1)); 
+              // adding shadows on .element makes it look more like a frame, than a hole
+              clone.find(".element").addClass("background_"+class_option); // +" shadows_"+class_option 
+              clone.addClass("shadows_"+class_option); // +" shadows_"+class_option     
+              //append clones on the end till done
+              $("#display_board_X").append(clone)   
+      }  // end FOR 
+  }; // ====== end of initial character rendering ====== //
    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// = = = = = = = = === SCRAP AND FUN BELOW THIS LINE ==== = = = = = = = = = `
-// = = = = = = = = === SCRAP AND FUN BELOW THIS LINE ==== = = = = = = = = = `
-// = = = = = = = = === SCRAP AND FUN BELOW THIS LINE ==== = = = = = = = = = `
-// = = = = = = = = === SCRAP AND FUN BELOW THIS LINE ==== = = = = = = = = = `
-// = = = = = = = = === SCRAP AND FUN BELOW THIS LINE ==== = = = = = = = = = `
-// = = = = = = = = === SCRAP AND FUN BELOW THIS LINE ==== = = = = = = = = = `
-
-
-//   // const gods = ['Apollo', 'Artemis', 'Ares', 'Zeus'];
-//   // 
-//   // gods.forEach(function (xName, index){
-//   //   console.log(index + '. ' + xName);
-//   // });
-//   // create an element with an object literal, defining properties
-//   var $e = $("<div>", {id: "fucktard", name: 'test', class: "aClass", text: "here it is"});
-//   $e.click(function(){ /* ... */ alert("clicked") });
-//   // add the element to the body
-//   $(".button").after($e); 
-//   
-//   setInterval(myFunction, 1000);
-//   
-//   function myFunction() {
-//     let d = new Date();
-//     document.getElementById("fucktard").innerHTML=
-//     d.getHours() + ":" +
-//     d.getMinutes() + ":" +
-//     d.getSeconds();
-//   }
-//   
-//   
-//   
-//   
-//   
-//   
-//   
-//   
-//   
-//   function change_character() { 
-//     console.clear()
-//     // get/insert char here, rando for dev
-//     rando = String.fromCharCode(65+Math.floor(Math.random() * 26));  
-//     // this is the main timing variable. 
-//     // All others are calculated from this one
-//     // if timing never changes, coudl all be done in css
-//     timing = 2    // 2 is fast, 20 is slow
-//      
-//     $(" .flap").css( { // flips the top panel
-//                       "transform" : "rotateX(-180deg)", 
-//             "transition-property" : "transform",
-//      "transition-timing-function" : "linear",
-//           "transition-duration" : (timing/14).toFixed(2)+"s",  
-//              "transition-delay" : "0s" 
-//     });
-//     
-//       $(" .top_back_shadow").css( { // adds shadow to the bottom half when top flipped over it
-//                       "opacity" : "0", 
-//             "transition-property" : "opacity",
-//      "transition-timing-function" : "ease-in",
-//           "transition-duration" : (timing/20).toFixed(2)+"s",    // lower # is slower   
-//              "transition-delay" : (timing/80).toFixed(2)+"s"     // lower # is slower 
-//     });
-//   
-//     
-//     $(" .shadow").css( { // adds shadow to the bottom half when top flipped over it
-//                       "opacity" : "1", 
-//             "transition-property" : "opacity",
-//      "transition-timing-function" : "ease-in-out",
-//           "transition-duration" : (timing/57).toFixed(2)+"s",    // 35   
-//              "transition-delay" : (timing/44).toFixed(2)+"s"     // 45.  
-//     });
-//     
-//   // replaces the .shiny class on 'front'; animates the shine as it flips
-//   $(" .front").css( { // Shines top panel
-//                "background" : "linear-gradient(178deg,#0000 5%,rgba(255,255,255,0.3) 50%,#0000 96%) rgba(50,50,50,1)",
-//           "background-size" : "100% 400%",
-//                 "animation" : "shineFront "+(timing/40).toFixed(2)+"s 1" // default was 0.5       
-//   });
-//    
-//   // replaces the .shiny class on 'back/bottom' animates the shine as it flips
-//   $(" .back").css( { // Shines top panel 
-//                 "background" : "linear-gradient(178deg,#0000 5%,rgba(255,255,255,0.3) 50%,#0000 96%) rgba(50,50,50,1)",
-//            "background-size" : "100% 400%",
-//                  "animation" : "shineBack "+(timing/4).toFixed(2)+"s 1"  // default was 0.5  
-//    });
-//   
-//   // 1. => Probably needs to be on transitionENd for slow motion transitions  
-//   $( ".back h1" ).text( rando );  
-//   $( ".top" ).text( rando );
-//   
-//   // NEW on TRANSITION END functions to replace timeout below... 
-//   $('.shadow').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',   
-//     function(e) {
-//        $(".front h1" ).text( rando ); 
-//        $(".bottom" ).text( rando ); // this was in a setTimeout with delay: container_h1_delay*2
-//     })
-//     
-//   //  .back resets all styles after top shadow animation, NOT the right animation to follow, but it works 
-//   $('.top_back_shadow').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend',
-//       function(e) {
-//       $(" .back, .front, .flap, .bottom, .shadow, .top_back_shadow").removeAttr("style");
-//   });
-//     
-//   
-//   };  // END of change_character function
-//   
-//   
-//   
-//   
-//   
-//   
-//   
-//   function change_character_w_posXXXXX( step ) { 
-//     position = "#pos_1_"+(step)// already incremented in the function variable
-//    // make it say WHICH element it's chaning, currently it's not based on posision!!
-//     // get/insert char here, rando for dev
-//     rando = String.fromCharCode(65+Math.floor(Math.random() * 26));  
-//     // console.log(position + " "+ rando);
-//     // this is the main timing variable. All others are calculated from this one
-//     timing = 8  // 2 is fast, 20 is slow
-//     reset_delay = (timing*70).toFixed(2) //*100 
-//     // this is when the background changes to rando, from original
-//     container_h1_delay = (timing*24).toFixed(2) //*50  
-//     // resetting the top h1
-//     reset_TOP__h1_delay = (timing*100).toFixed(2) //*50  
-//     // Why is this not working?
-//     front_shine_duration = (timing/40).toFixed(2)
-//     
-//     $(position+" .flap").css( { // flips the top panel
-//                       "transform" : "rotateX(-180deg)", 
-//             "transition-property" : "transform",
-//      "transition-timing-function" : "linear",
-//           "transition-duration" : (timing/14).toFixed(2)+"s",  
-//              "transition-delay" : "0s" 
-//     });
-//     
-//       $(position+" .top_back_shadow").css( { // adds shadow to the bottom half when top flipped over it
-//                       "opacity" : "0", 
-//             "transition-property" : "opacity",
-//      "transition-timing-function" : "ease-in",
-//           "transition-duration" : (timing/20).toFixed(2)+"s",    // lower # is slower   
-//              "transition-delay" : (timing/80).toFixed(2)+"s"     // lower # is slower 
-//     });
-//   
-//     
-//     $(position+" .shadow").css( { // adds shadow to the bottom half when top flipped over it
-//                       "opacity" : "1", 
-//             "transition-property" : "opacity",
-//      "transition-timing-function" : "ease-in",
-//           "transition-duration" : (timing/57).toFixed(2)+"s",    // 35   
-//              "transition-delay" : (timing/44).toFixed(2)+"s"     // 45.  
-//     });
-//    
-//   // replaces the .shiny class on 'front'; animates the shine as it flips
-//   $(position+" .front").css( { // Shines top panel
-//                "background" : "linear-gradient(178deg,#0000 5%,rgba(255,255,255,0.3) 50%,#0000 96%) rgba(50,50,50,1)",
-//           "background-size" : "100% 400%",
-//                 "animation" : "shineFront "+front_shine_duration+"s 1" // default was 0.5       
-//   });
-//    
-//   // replaces the .shiny class on 'back/bottom' animates the shine as it flips
-//    setTimeout(function ( ) {  
-//      $(position+" .back").css( { // Shines top panel
-//                 "background" : "linear-gradient(178deg,#0000 5%,rgba(255,255,255,0.3) 50%,#0000 96%) rgba(50,50,50,1)",
-//            "background-size" : "100% 400%",
-//                  "animation" : "shineBack 0.6s 1" // default was 0.5      
-//    });
-//   }, (timing*40).toFixed(2)  );  // fraction of var timing ? 
-//   
-//      
-//     
-//   // 1. => update the char in the back  
-//   $( position+" .back h1" ).text( rando );  
-//   // 2. => change the text to appropriate text  
-//   setTimeout(function () {  
-//       $( position+" .top" ).text( rando );
-//   }, container_h1_delay );  
-//   // 3. => change the text to appropriate text
-//   setTimeout(function () {  
-//        $( position+" .bottom" ).text( rando );
-//   }, container_h1_delay*2 ); 
-//          // 4. => Remove styling and set text on the front 
-//          setTimeout(function ( ) {  
-//            // this seams to ONLY happen on the very last character
-//            // remove the Timeout, and the effect is reversed
-//            // with only the TOP changing, and not the bottoms
-//            // BUT, it does happen sequentialy according to console.log
-//   
-//           $(position+" .back, "+position+" .front, "+position+" .flap, "+position+" .bottom, "+position+" .shadow, "+position+" .top_back_shadow").removeAttr("style");
-//    
-//    //$(" .back, .front, .flap, .bottom, .shadow, .top_back_shadow").removeAttr("style");
-//             $(position+" .front h1" ).text( rando );
-//             // ^ again, above works OUTSIDE of setTimeout, but reverts ( due to other timeings?)
-//         }, reset_delay);  
-//     // $(position+" .front h1" ).text( rando );
-//     // setFrontH1(position, rando, reset_delay)
-//   
-//   };  // END of change_character function
-//   
-//   
-//   
-//   
-//   
-//   
-//   
-//   
-//   
-//   
-//   
-//   
-//   
-//   
-//   
-//   
-//   
-//   
-//   
-//   
-//   
-//   
-//   
-//   //$(position+" .front h1" ).text( rando );
-//   function setFrontH1(positionX, randoX, reset_delayX) {
-//     setTimeout(function ( ) {  
-//       $(positionX+" .front h1" ).text( randoX );
-//     }, reset_delayX);
-//     console.log("COMPLETED VIA FUNCTION")
-//   }
-//   
+  // put the characters on screen
+  renderCharacters( user_input )
+    
+  }; // window onload 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  // ===============  U T I L I T Y  ================ // 
+  // ===============   (functionS)   ================ // 
+  // ===============   ==========    ================ //  
+  
+  // ==========   Generate a Random Alpha Character   ============= //
+  function startCycle() {
+    // do something here  
+    clockTO = setTimeout(startCycle, 1000) 
+    // call to initialize the looping
+    startCycle()
+   }; // end startTimefunction
+  
+  // ==========   Generate a Random Alpha Character   ============= //
+  randoAlpha = String.fromCharCode(65+Math.floor(Math.random() * 26)); 
+  
+  
+  

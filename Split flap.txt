@@ -1,37 +1,11 @@
 
 
-There are 4 elements:
+This versoin is working wonderfully!	
 
+add sound
 
-1) The top hidden flap: next letter to be displayed
+add some public data via API
 
-	2) Bottom hidden flap: next letter being displayed (bottom half) hidden, until flipped
-	This is placed absolute, on the BACK of the (3) Top Shown flap and is rotated 180 deg
-	so it flips down correctly to display the bottom half of the next character, upright.
+add text input fields for several rotating messages
 
-3) The Top shown flap: current letter being displayed (top half)
-
-4) The Bottom shown flap: current letter being displayed (bottom half)
-
-#2 is the problem. 
-	If I animate the flap to flip down correctly, the backside is NEVER able to rotate the letter and display correctly. 
-
-
-I have several CodePens to this effect: Flip Card 1-5. Each having a different experiment. 
-
-I'm moving on to a simpler idea. 
-
-The screen will fill with X rows (vw/min 10, max 50) and x cols (vw/min 10, max 50)
-
-Responsive to screen size, and Larger/Smaller sliding input.
-
-
-1/8/22
-resetting border box and flip animation
-
-HUB divs were commented out in html
-.flap transition origen changed
-all :before and :after pseudo elements commented out
-
-Working well, slow motion the flip to see where the final small glitch is.
-(hubs are swinging to the top of top flap when rotating)
+add Spotify support for playing and pulling album names to help piper read. 

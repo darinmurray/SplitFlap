@@ -1,454 +1,650 @@
-:root { font-size:16px; }
-body { font-family: 'Azeret Mono', monospace; 
-}
-html, body {margin:0; padding:0;} 
-
-
-*, *::before, *::after { box-sizing: border-box; /* gives padding and border from inside */
-}
-
-
-/* ~~~~~~~~~ for flipIt DEV Only ~~~~~~~~~~~ */
-/* ~~~~~~ DO NOT COPY TO PROJECT ~~~~~~~ */
-body {background-color: gray;}
-.button_row {
-  display:flex;
-}
-.button.one { /* FOR DEV TESTING ONLY */
-  height:150px;
-  background: SteelBlue; 
-  cursor:pointer; 
-  
-}
-.button.two { /* FOR DEV TESTING ONLY */
-   height:150px;
-  background: darkgray; 
-  cursor:pointer; 
-}
-
-.button.three { /* FOR DEV TESTING ONLY */
-  height:150px;
-  background: red; 
-  cursor:pointer; 
-}
-.button.three { /* FOR DEV TESTING ONLY */
-  height:150px;
-  background: red; 
-  cursor:pointer; 
-}
-
-.button.four { /* FOR DEV TESTING ONLY */
-  height:50px;
-  background: black; 
-  cursor:pointer; 
-}
-
-/* FOR DEV TESTING ONLY */
-/* div.button { 
-  width: 100%;
-  height: 100%;
-} */
-
-/* ~~~~~~~ ** END flipIt DEV ** ~~~~~~~~~~~ */
-
-
-
-
-/* main background  - - - coppied from master*/
-.display_board_container {
-background: rgb(101,101,101);
-background: linear-gradient(175deg, rgba(101,101,101,1) 0%, rgba(68,68,68,1) 5%, rgba(0,0,0,1) 100%); 
-  width: 100vw;
-  height: 30vh; /* was 100 on original */
-  padding: 0;
-  margin: 0; 
-  display:flex;
-  flex-direction: row;
-  flex-wrap: wrap; 
-  justify-content: center;  /* works on the main (row=hor/col=vert) axis */
-  align-items:center;   /* works on the cross (row=hor/col=vert) axis  */
-  transform-origin: center center;
-  
--webkit-border-radius: 5px;
--moz-border-radius: 5px;
-border-radius: 5px;
-
-
--webkit-box-shadow: 2px 2px 7px -1px #5D5D5D, -2px -2px 7px -1px #000000, inset -2px -2px 6px -1px #000000, inset 2px 2px 3px -1px #5D5D5D; 
-box-shadow: 2px 2px 7px -1px #5D5D5D, -2px -2px 7px -1px #000000, inset -2px -2px 6px -1px #000000, inset 2px 2px 3px -1px #5D5D5D;
-}
-
-/*. END coppied from master */
-
-
-
-
-h1 {
-    /* This should really be a P instead of an h1 */
-  color:white;
-  padding:0; 
-  margin:0; 
-  line-height:auto;
-  font-size:7rem;   
-  text-align:center;
-}
-
-.element { /* ACTUAL CHARACTER CONTAINER */
-  width: 100px; 
-  height: 129px;
-/* preserve-3d fixed jitter after flip down, earlier */
-/* now, removing it fixes the z index of the axle/hubs */
-/* transform-style: preserve-3d;  */
-  perspective: 300px;
-  position:relative; 
-/* overflow:hidden; /* solves radius corners on inner HTML items but kills 3D effect */
-  border: 3px solid black;
-}
-
-.front {  /* TOP HALF OF FRONT FACING CHARACTER */
-background: linear-gradient(180deg, rgba(50,50,50,1) 0%, rgba(68,68,68,1) 50%, rgba(50,50,50,1) 100%);
-/* backgrounds of .element and .top both show, alternately. They should match, so this (top).element needed to be stretched  */
-}
-.element, .back { /* .BACK IS THE REVERSE SIDE OF .FRONT */ 
-background: linear-gradient(180deg, rgba(50,50,50,1) 0%, rgba(68,68,68,1) 20%, rgba(50,50,50,1) 70%);
-/* MID/END color here are at 20%/70% so it more matches the scale of the .front gradient and eliminates jitter as the front appears and dissapears */
-}
-
-
-.flap { /* THE WRAPPER FOR .FRONT AND .BACK */
-  position:absolute;
-  top: 0;
-  width: 100px; 
-  height: 65px;
-  transform-style: preserve-3d;  
-  /* transform-origin: 0% 99.5%; */
-  transform-origin: 0% 100%;
-}
-
-.front, .back { 
-  backface-visibility: hidden;
-  position: absolute;
-  overflow:hidden; 
-}
-.front, .back{
-  /* height:61px;
-  width: 90px; */
-  height:67px;
-  width: 94px;
-}
-.back {    
-  transform: rotateX(-180deg);
-  transform-origin: 0% 100%; /* LIFE SAVER */
-  opacity: 1; /* Is this needed? */
-}
-   /* sticks out the bottom edge, or is OVER the pseudo element, showing anoying white in axle during transition  */
-   /* PLEASE FIX ME  ! ! ! ! ! ! !   */
-/* .back h1{  
-  position:relative;
-  top:-4.02rem; 
-} */
-
-.front h1{ 
-padding-right: 1px;
-}
-
-.top{ /* TOP HALF OF back OF CHARACTER DISPLAY, BEHIND .front, static */
-  display:block;
-  height:67px; 
-  overflow:hidden;
-}
-.bottom{ /* BOTTOM HALF OF CHARACTER DISPLAY, BEHIND .back when flipped down, static  */
-  display:block;
-  height:60px;
-  overflow:hidden; 
-  /* line height does NOT work as negative */
-  line-height: 0px; 
-}
-
-
-/* ==== shadow on bottom, back of element ==== */
-/*  shows on bottom as panel is flipped down   */
-.shadow {
-    position: absolute;
-    width: 100%;
-    height: 50%; /* 50 */
-    box-shadow: inset 0px 56px 23px -12px rgba(0, 0, 0, 1);
-    top: 50%; /* 50 */
-    left: 0;
-    opacity:0; /* animatede in JS */ 
-}
-
-
-
-/* ========= Center Hubs ======== */
-.hub {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between ;
-  position:absolute;
-  bottom: -12px; 
-  height:20px;
-  width: 100%;
-}
-
-h1 .hub {
-  bottom: 40%; 
-}
-.back .hub {
-  bottom: 80%; 
-}
-/* .hub only, ever, has 2 div children. No need for class names */
-.hub > div {
-  background: rgb(0,0,0);
-  background: linear-gradient(178deg, rgba(0,0,0,1) 0%, rgba(68,68,68,1) 36%, rgba(0,0,0,1) 100%);
-  width: .35rem;
-  height: 100%;
-  margin: 0px 8px;
-  border-radius: 3px ;
-  -webkit-box-shadow: 2px 1px 5px 2px rgba(0,0,0,0.24); 
-  box-shadow: 2px 1px 5px 2px rgba(0,0,0,0.24);
-}
-/* ========= END Center Hubs ======== */
-
-
-
-
-
-/* ========= Center GAP effect ======== */ 
-
-/* top: Xpx; set for both separately, SEE BELOW */
-.back:before, .element:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: rgba(0, 0, 0, .7);
-    box-shadow: 0 1px 2px 0 rgba(255, 255, 255, .4);
-} 
-/* <-- for the front */
-.element:before { 
-    top: 50%;
-    z-index: 999;
-} 
-/* <-- for the back */
-.back:before {    
-    top: 1px;  
-} 
-
-/* ========= bottom STACK effect ======== */
-.element:after {
-    content: '';
-    position: absolute;
-    left: 0; 
-    right: 0;
-    bottom: 1px;
-    height: 2px;
-    background: rgba(0, 0, 0, .5);
-    box-shadow: 0 1px 2px 0 rgba(255, 255, 255, .2);
-} 
-
-
-
-
-
-/* ====== Shine effect as .panel flips up/down ===== *//*
-     The styles applied to .front(shineFront) and 
-      .back(shineBack) have been moved to the JS
-      for animation timing, keyframes remain here 
-/* ================== check the js ================= */
-
-@keyframes shineFront {
-  /* EXPERIMENT with this, I'm just guessing */
-  0%  { background-position: 0% 70%; }
-100% { background-position: top;  }
-}
-@-webkit-keyframes shineFront {
-    0%  { background-position: 0% 70%; }
-  100% { background-position: top;  }
-}
-@-moz-keyframes shineFront {
-    0%  { background-position: 0% 70%; }
-  100% { background-position: top;  }
-}
-
-@keyframes shineBack {
-  10% { background-position:top  }  /* 40 */
-  80% { background-position:top  } /* 70 */
-  10% { background-position: bottom;  } /* 100 */
-}
-@-webkit-keyframes shineBack {
-  10% { background-position:top  }  /* 40 */
-  80% { background-position:top  } /* 70 */
-  10% { background-position: bottom;  } /* 100 */
-}
-@-moz-keyframes shineBack {
-  10% { background-position:top  }  /* 40 */
-  80% { background-position:top  } /* 70 */
-  10% { background-position: bottom;  } /* 100 */
-}
-
-
-
-
-
-
-
-
-
-
-
-/* ==== uncomment below to show all flaps in different colors for dev tesing */
-/* 
-.element { 
-background-color:lightgray   
-} 
-.element h1{ 
-  color:purple;
-  background-color:rebeccapurple; 
-} 
-.top{
-  background-color: green;
-  color:orange;
-}
-.bottom{
-  background-color: pink;
-  color:white;
+:root { font-size:16px; 
+  --timing: 0.2s;
+     --black-20: #000000;
+     --black-19: #1a1a1a;
+     --black-18: #1d1d1d;
+     --black-17: #202020;
+     --black-16: #232323;
+     --black-15: #252525;
+     --black-14: #2a2a2a;
+     --black-13: #2f2f2f;
+     --black-12: #343434;
+     --black-11: #464646;
+     --black-10: #4c4c4c;
+     --black-9: #515151;
+     --black-8: #575757;
+     --black-7: #5c5c5c;
+     --black-6: #727272;
+     --black-5: #9e9e9e;
+     --black-4: #cacaca;
+     --black-3: #e0e0e0;
+     --black-2: #ebebeb;
+     --black-1: #f5f5f5; /* whitesmoke */
  
-}
-.front { 
-background-color:orange   
-} 
-.front h1{ 
-  color:rgb(73, 73, 148);
-  background-color:darkblue; 
-  border: 1px solid white;
-} 
-.back {  
-  background-color:pink;
-  border:1px solid red;
-}
-.back h1{ 
-  background-color:brown;
-  color:yellow;
-}
+ }
+ body { font-family: 'Azeret Mono', monospace;}   
+ html, body {margin:0; padding:0; cursor:pointer;}  
+  
+ 
+ 
+ /* gives padding and border from inside */
+ *, *::before, *::after { box-sizing: border-box; }
+ 
+ /* ~~~~~~~~~ for flipIt DEV Only ~~~~~~~~~ */
+ /* ~~~~~~~~ DO NOT COPY TO PROJECT ~~~~~~~ */
+ body {background-color: gray;}
+ 
+ 
+ 
+ 
+ 
+ 
+ /* main background  - - - coppied from master*/
+ .display_board_container {
+ background: rgb(101,101,101);
+ background: linear-gradient(175deg, rgba(101,101,101,1) 0%, rgba(68,68,68,1) 5%, rgba(0,0,0,1) 100%); 
+ /*   background-color:yellow; */
+   width: 100vw;
+   height: auto; /* 30vh was 100 on original */
+   padding: 30px; /*  was 0 on original */
+   margin: 0; 
+   display:flex;
+   flex-direction: row;
+   flex-wrap: wrap; 
+   justify-content: center;  /* works on the main (row=hor/col=vert) axis */
+   align-items:center;   /* works on the cross (row=hor/col=vert) axis  */
+   transform-origin: center center;
+ -webkit-border-radius: 5px;
+ -moz-border-radius: 5px;
+ border-radius: 5px;
+ -webkit-box-shadow: 2px 2px 7px -1px #5D5D5D, -2px -2px 7px -1px #000000, inset -2px -2px 6px -1px #000000, inset 2px 2px 3px -1px #5D5D5D; 
+ box-shadow: 2px 2px 7px -1px #5D5D5D, -2px -2px 7px -1px #000000, inset -2px -2px 6px -1px #000000, inset 2px 2px 3px -1px #5D5D5D;
+ /* transform: scale(50%); */
+ }
+ 
+ /*. END coppied from master */
+ 
+ 
+ h1 { /* This should really be a P instead of an h1 */
+   color:white;
+   padding:0; 
+   margin:0; 
+   line-height:auto;
+   font-size:7rem;   
+   text-align:center;
+ }
+ 
+ .element_wrapper { /* ACTUAL CHARACTER CONTAINER */
+   wi dth: 100px; 
+   hei ght: 129px;
+   position:relative; 
+   /* unit spacing */
+   margin: 5px; 
+   /* effective border used with margin on .element */
+   background-color: black; /* #202020 <<== just a solid color */
+   /* background: transparent; */ /* <<== another nice effect */
+   border-radius:3px;
+ /*     transform: scale(50%); */
+ /*   transform-origin: bottom left; */
+ }
+ 
+ .element { /* ACTUAL CHARACTER CONTAINER */
+   width: 100px; 
+   height: 130px;
+   /* preserve-3d fixed jitter after flip down, earlier */
+   /* now, removing it fixes the z index of the axle/hubs */
+   /* transform-style: preserve-3d;  */
+   perspective: 300px;
+   position:relative; 
+   /* effective border when used with .element_wrapper background-color  */
+   margin:4px; 
+   margin-bottom:7px;
+   /* overflow:hidden; /* solves radius corners on inner HTML items but kills 3D effect */
+   /* do NOT give this a border. It screws up the center animation */
+ }
+ 
+ 
+ 
+ 
+ .front {  /* TOP HALF OF FRONT FACING CHARACTER */
+   background: linear-gradient(180deg, rgba(50,50,50,1) 0%, rgba(68,68,68,1) 50%, rgba(50,50,50,1) 100%);
+   /* same as .top to avoid jitters when recycled as the show alternately */
+   /* Should this be a variable? */
+   width: 100%;
+   height: 100%;
+   border-radius:5px;
+ }
+ 
+ /* =====================   flipp   ========================== */
+ /* =====================   effect  ========================== */
+ /* =====================  __\|/__  ========================== */
+ .front.flipped {
+      background : linear-gradient(178deg,#0000 5%,rgba(255,255,255,0.3) 50%,#0000 96%) rgba(50,50,50,1);
+ background-size : 100% 400%;
+       animation : shineFront calc(var(--timing) * 0.25) 1;      
+ }
+ 
+ 
+ @keyframes shineFront {
+   /* EXPERIMENT with this, I'm just guessing */
+   0%  { background-position: 0% 70%; }
+ 100% { background-position: top;  }
+ }
+ @-webkit-keyframes shineFront {
+     0%  { background-position: 0% 70%; }
+   100% { background-position: top;  }
+ }
+ @-moz-keyframes shineFront {
+     0%  { background-position: 0% 70%; }
+   100% { background-position: top;  }
+ }
+ 
+ 
+ .front, .back { 
+   backface-visibility: hidden;
+   position: absolute;
+   overflow:hidden; 
+ }
+ 
+ .back { /* .BACK IS THE REVERSE (non-visible) SIDE OF .FRONT */   
+   transform: rotateX(-180deg);
+   opacity: 1; /* Is this needed? */
+   width: 100%;
+   height: 100%;
+   /* background: linear-gradient(180deg, rgba(50,50,50,1) 0%, rgba(68,68,68,1) 20%, rgba(50,50,50,1) 70%); */
+   /* MID/END color here are at 20%/70% so it more matches the scale of the .front gradient and eliminates jitter as the front appears and dissapears */
+   /* background ultimately replaced by adding matching (to bottom) random background in the js */
+ }
+ .back h1{  
+   position:relative;
+   top:-130px;  
+   z-index: -1;
+ }
+ .back_shine {
+ position:relative;
+ height: 100%;
+ width: 100%; 
+ /* opacity here is at 1 so it can be controlled in the animateion below */
+ opacity: 1;
+ }
+ 
+ 
+ 
+ .flap { /* THE WRAPPER FOR .FRONT AND .BACK */
+   position:absolute;
+   top: 0;
+   width: 100%; 
+   height: 65px;  
+   transform-style: preserve-3d;  
+   transform-origin: 0% 100%; /* 99.5% */
+ }
+ /* =====================   flipp   ========================== */
+ /* =====================   effect  ========================== */
+ /* =====================  __\|/__  ========================== */
+ .flap.flipped{
+                  transform: rotateX(-180deg); 
+        transition-property: transform;,
+ transition-timing-function: linear;
+        transition-duration: var(--timing);   /*calc(var(--timing) * 0.75); */
+           transition-delay: 0s;  
+ }
+ 
+ 
+ /* back 'wall' of TOP HALF OF CHARACTER DISPLAY, BEHIND .front, static */
+ /* height is sensitive for flipping lining up on bottom half */
+ .top{ 
+   display:block;
+   height:65px;  /*  this thing is a moving target. I have to changet it a pixel or two every time I adjust anyting else */
+   overflow:hidden;
+   /* same as .front to avoid jitters when recycled */
+   /* Should this be a variable? */
+   background: linear-gradient(180deg, rgba(50,50,50,1) 0%, rgba(68,68,68,1) 50%, rgba(50,50,50,1) 100%);
+ }
+ /* adjusting .top height, back height and back h1, AS WELL as the pseudo elements greatly effects the centerline of the visual flipping  */
+ 
+ .bottom{ /* BOTTOM HALF OF CHARACTER DISPLAY, BEHIND .back when flipped down, static  */
+   display:block;
+   height:65px; /* not making much of a dif in anything */
+   overflow:hidden; 
+   /* line height does NOT work as negative */
+   line-height: 0px; 
+ }
+ 
+ 
+ /* ==========  shadow on bottom, back of element  ========= */
+ /* ======  shows on bottom as panel is flipped down  ====== */
+ .shadow {
+     position: absolute;
+     width: 100%;
+     height: 50%; /* 50 */
+     box-shadow: inset 0px 56px 23px -12px rgba(0, 0, 0, 1);
+     top: 50%; /* 50 */
+     left: 0;
+     opacity:0; 
+ }
+ /* =====================   flipp   ========================== */
+ /* =====================   effect  ========================== */
+ /* =====================  __\|/__  ========================== */
+ /* adds shadow to the bottom half when top flipped over it */
+ .shadow.flipped { 
+                    opacity : 1; 
+        transition-property : opacity;
+ transition-timing-function : ease-in;
+        transition-duration : calc(var(--timing) * 0.16);  
+           transition-delay : calc(var(--timing) * 0.17);  
+ }
+ 
+ 
+ 
+ 
+ 
+ /* ========= Center Hubs ======== */
+ /*   3 instances of .hub in the   */
+ /* HTML to preserve the 3D effect */
+ /*     as it is being flipped     */
+ .hub {
+   display: flex;
+   flex-direction: row;
+   justify-content: space-between ;
+   position:absolute;
+   bottom: -12px; 
+   height:20px;
+   width: 100%;
+ }
+ /* shows on the TOP as it's being flipped */
+ h1 .hub {
+   bottom: 53px; 
+ }
+ /* shows on the BACK, as it's being flipped */
+ .back .hub {
+   bottom: 52px;  /* 80% */ 
+ }
+ 
+ .hub > div {
+   background: rgb(0,0,0);
+   background: linear-gradient(178deg, rgba(0,0,0,1) 0%, rgba(68,68,68,1) 36%, rgba(0,0,0,1) 100%);
+   width: .35rem;
+   height: 100%; 
+   margin: 0px 8px;
+   border-radius: 3px ;
+   -webkit-box-shadow: 2px 2px 3px 0px rgba(0,0,0,0.6); 
+   box-shadow: 2px 2px 3px 0px rgba(0,0,0,0.6); 
+ }
+ /* ========= END Center Hubs ======== */
+ 
+ 
+ 
+ 
+ 
+ /* ========= Center GAP effect ======== */ 
+ /* putting it on the .back:before,  (with the same values) exagerates the gap flicker  */
+ .back:before, .element:before {
+   content: '';
+   position: absolute;
+   left: 0;
+   right: 0;
+   height: 3px;
+   background: rgba(0, 0, 0, .7);
+   box-shadow: 0 1px 2px 0 rgba(255, 255, 255, .4);
+ }
+   
+ /* <-- for the front */
+ /* <-- This exagerates the cener gap jitter crap? */
+ .element:before { 
+   top: 50%;
+ } 
+ /* <-- for the back */
+ .back:before {    
+   top: 0px;  
+ }   
+ /* ========= bottom STACK effect ======== */
+ /* THis should be on the .back, NOT the .element */
+ .bottom:after, .element:after  {
+   content: '';
+   position: absolute;
+   left: 0; 
+   right: 0;
+   width:96%;
+   margin:0 auto;
+   bottom: -3px;
+   height: 3px;
+   background: rgba(30, 30, 30, .5);
+   box-shadow: 0 1px 2px 0 rgba(25, 25, 25, .9); 
+ } 
+ 
+ .back, .bottom { 
+   border-bottom:1px solid black;
+ }
+ 
+ 
+ 
+       /* ====== Shine effect as .panel flips down ===== */
+       /* ====== This shows on the BACK of the TOP ===== */  
+       /* ======  as it flips over, trending down  ===== */ 
+ /* =====================   flipp   ========================== */
+ /* =====================   effect  ========================== */
+ /* =====================  __\|/__  ========================== */
+ .back_shine.flipped {
+ /*   this shold ONLY be used for a transparent overlay as background is set on .back above  */
+ /*   THIS background is white on transparent  */
+  background: linear-gradient( 178deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.3) 20%, rgba(255,255,255,0.0) 60%, rgba(255,255,255,0.0) 100%)  rgba(0,255,255,0.0);
+  background-size: 100% 700%; 
+  animation: shineBack calc(var(--timing) * 0.5) 1; 
+  animation-delay: calc(var(--timing) * 0.5);
+ } 
+ 
+ 
+ @keyframes shineBack {  
+   0% { background-position-y: 0%;  }  
+   100% { background-position-y: 100%;  }
+ }
+  
+ @-webkit-keyframes shineBack {
+   0% { background-position-y: 0%;  }  
+   100% { background-position-y: 100%;  }
+ }
+ @-moz-keyframes shineBack {
+   0% { background-position-y: 0%;  }  
+   100% { background-position-y: 100%;  }
+ }
+ 
+ 
+ 
+ /* ====== shows on top-inside-back as .front ===== */
+ /* ======   is flipped down, shadow slowly   ===== */  
+ /* ======     goes away from behind it.      ===== */ 
+ .top_back_shadow {
+   position: absolute;
+   width: 100%;
+   height: 50%;
+   box-shadow: inset 0px 56px 23px -12px rgba(0, 0, 0, 0.5);
+   top: 0;
+   left: 0;
+ }
+ /* =====================   flipp   ========================== */
+ /* =====================   effect  ========================== */
+ /* =====================  __\|/__  ========================== */
+ .top_back_shadow.flipped {
+                    opacity : 0; 
+        transition-property : opacity;
+ transition-timing-function : ease-in;
+        transition-duration : calc(var(--timing) * 0.5);  
+           transition-delay : 0s; 
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ /* ==== uncomment below to show all flaps in different colors for dev tesing */
+ /*      FIND OUT THE FUNCTIONAL DIFFERENCE BETWEEN THE .BACK AND THE .BOTTOM. 
+                    IT LOOKS LIKE .BACK IS NEVER TURNING INTO .BOTTOM
  */
-
-
-
-
-
-
-
-
-
-
-
-
-/*  ======================================  */
-    /*   - - > > DO NOT TOUCH < < - -   */
-/*  ======================================  */
-    /*  - - >  BELOW THIS LINE  < - - */
-
-
-/*  =================================== */
-/*  randomized borders and backgrounds  */
-/*  =================================== */
-.background_0 {
-  background: rgb(50,201,101);
-  background: linear-gradient(170deg, rgba(101,101,101,1) 0%, rgba(68,68,68,1) 5%, rgba(30,30,30,1) 100%);
-border-radius: 3px 3px 3px 3px;
-}
-.background_1 {
-  background: rgb(201,101,101);
-  background: linear-gradient(180deg, rgba(101,101,101,1) 0%, rgba(68,68,68,1) 5%, rgba(40,40,40,1) 100%);
-border-radius: 3px 3px 3px 3px;
-}
-.background_2 {
-  background: rgb(201,201,101);
-  background: linear-gradient(190deg, rgba(101,101,101,1) 0%, rgba(68,68,68,1) 5%, rgba(50,50,50,1) 100%);
-border-radius: 3px 3px 3px 3px;
-}
-.background_3 {
-  background: rgb(101,101,195);
-  background: linear-gradient(200deg, rgba(101,101,101,1) 0%, rgba(68,68,68,1) 5%, rgba(50,50,50,1) 100%);
-border-radius: 3px 3px 3px 3px;
-}
-
-.shadows_0 { 
-box-shadow: 
-    1px 3px 5px 0px rgba(0,0,0,0.35) inset, -1px -1px 2px 0px rgba(0,0,0,0.58), 1px 1px 2px 0px rgba(255,255,255,0.3);
-}
-.shadows_1 { 
-box-shadow: 
-    2px 3px 5px 0px rgba(0,0,0,0.4) inset, -1px -1px 2px 0px rgba(0,0,0,0.58),
-    1px 1px 2px 0px rgba(255,255,255,0.1);
-}
-.shadows_2 { 
-box-shadow: 
-    3px 2px 5px 0px rgba(0,0,0, 0.45) inset, -1px -1px 2px 0px rgba(0,0,0,0.58), 1px 1px 2px 0px rgba(255,255,255,0.3);
-}
-.shadows_3 { 
-box-shadow: 
-    4px 2px 5px 0px rgba(0,0,0,0.5) inset, -1px -1px 2px 0px rgba(0,0,0,0.58), 1px 1px 2px 0px rgba(255,255,255,0.2);
-}
-
-
-
-
-/* ==== TESTING TESTING TESTING  ==== */ 
-/*  shows on top-inside-back as .front is flipped down   */
-.top_back_shadow {
-    position: absolute;
-    width: 100%;
-    height: 50%;
-    box-shadow: inset 0px 56px 23px -12px rgba(0, 0, 0, 0.5);
-    top: 0;
-    left: 0;
-    opacity:1; /* animatede in JS */ 
-}
-
-
-
-
-
-
-/* no longer used */
-.box_shadow { box-shadow: 
-     -1px -1px 2px 0px rgba(0,0,0,0.58), 1px 1px 2px 0px rgba(255,255,255,0.3);
-     /* removed inset shadow as it was makign the top flap look like it was flipping IN instead of OUT*/
-     /* box-shadow: 1px 3px 5px 0px rgba(0,0,0,0.35) inset, -1px -1px 2px 0px rgba(0,0,0,0.58), 1px 1px 2px 0px rgba(255,255,255,0.3); */
-}
-
-.border_radius{
-  -webkit-border-radius:5px;
-  -moz-rborder-adius:5px;
-  border-radius:5px;
-}
-
-/*.shiny {
-  background: linear-gradient(178deg,#0000 5%,rgba(255,255,255,0.3) 50%,#0000 96%) rgba(50,50,50,1);
-  background-size:100% 400%;
-  animation: shine .6s 1;
-}*/
-
-
-
-
-
-
-
-
-/* kept just for fun review and tesing */
-
-/*.  REALLY FUN PULSATING SHADOW!!  */
-/* @keyframes shadowPulse {
-    0% { box-shadow: inset 0px 56px 23px -12px rgba(0, 0, 0, 0); }
-    100% { box-shadow: inset 0px 56px 23px -12px rgba(0, 0, 0, 1); }
-}
-.shad  ow-pulse {
-    animation-name: shadowPulse;
-    animation-duration: 1.5s; 
-    animation-iteration-count: 1;
-    animation-timing-function: linear;
-} */
+ /* .top is top BACK
+   .bottom is bottom FRONT
+  */
+ .top{
+ /*   background-color: green;
+   color:orange;
+   border:2px solid orange; */
+ }
+ .bottom{
+ /*   background-color: orange;
+   color:green;
+   border:2px solid green; */
+ }
+ .front { 
+ /*   background-color:purple ;
+   color:cyan; */
+ } 
+ .back {  
+ /*   color:pink;
+   background-color:pink;
+   border:1px solid red; */
+ }
+ .flap {
+   
+ }
+ .front h1{ 
+ /*   inherited from just h1 
+   col or:dimgray;
+   bac kground-color:darkblue;  */
+ } 
+ .back h1{ 
+ /*   backg round-color:brown;
+   col or:yellow;
+   lin e-height:120px;
+   over flow:hidden; */
+ }
+ 
+ .element { 
+  
+ } 
+ 
+ /* .front h1{
+   color:pink !important;
+ }
+ 
+ 
+ .element h1{ 
+   color:cyan;
+ }  */
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ /*  ======================================  */
+     /*   - - > > DO NOT TOUCH < < - -   */
+ /*  ======================================  */
+     /*  - - >  BELOW THIS LINE  < - - */
+ 
+ 
+ /*  =================================== */
+ /*  randomized borders and backgrounds  */
+ /*  =================================== */
+ .background_0 {
+   background: rgb(50,201,101);
+   background: linear-gradient(170deg, rgba(101,101,101,1) 0%, rgba(68,68,68,1) 5%, rgba(30,30,30,1) 100%);
+ border-radius: 3px 3px 3px 3px;
+ }
+ .background_1 {
+   background: rgb(201,101,101);
+   background: linear-gradient(180deg, rgba(101,101,101,1) 0%, rgba(68,68,68,1) 5%, rgba(40,40,40,1) 100%);
+ border-radius: 3px 3px 3px 3px;
+ }
+ .background_2 {
+   background: rgb(201,201,101);
+   background: linear-gradient(190deg, rgba(101,101,101,1) 0%, rgba(68,68,68,1) 5%, rgba(50,50,50,1) 100%);
+ border-radius: 3px 3px 3px 3px;
+ }
+ .background_3 {
+   background: rgb(101,101,195);
+   background: linear-gradient(200deg, rgba(101,101,101,1) 0%, rgba(68,68,68,1) 5%, rgba(50,50,50,1) 100%);
+ border-radius: 3px 3px 3px 3px;
+ }
+ 
+ 
+ 
+ .shadows_0 { 
+ box-shadow: 
+   1px 3px 5px 0px rgba(0,0,0,0.35) inset, 
+   -1px -1px 2px 0px rgba(0,0,0,0.58), 
+   1px 1px 2px 0px rgba(255,255,255,0.3);
+ }
+ .shadows_1 { 
+ box-shadow: 
+   2px 3px 5px 0px rgba(0,0,0,0.4) inset, 
+   -1px -1px 2px 0px rgba(0,0,0,0.58),
+   1px 1px 2px 0px rgba(255,255,255,0.1);
+ }
+ .shadows_2 { 
+ box-shadow: 
+   3px 2px 5px 0px rgba(0,0,0, 0.45) inset, 
+   -1px -1px 2px 0px rgba(0,0,0,0.58), 
+   1px 1px 2px 0px rgba(255,255,255,0.3);
+ }
+ .shadows_3 { 
+ box-shadow: 
+   4px 2px 5px 0px rgba(0,0,0,0.5) inset, 
+   -1px -1px 2px 0px rgba(0,0,0,0.58), 
+   1px 1px 2px 0px rgba(255,255,255,0.2);
+ }
+ 
+ 
+ 
+ /* reversed set for .back */
+ /* reversed set for .back */
+ /* reversed set for .back */
+ .shadows_R0 { 
+ box-shadow: 
+   1px 3px 5px 0px rgba(0,0,0,0.35) inset; 
+ /*   -1px -1px 2px 0px rgba(0,0,0,0.58),   */
+  /* 1px 1px 2px 0px rgba(255,255,255,0.3) */ ;
+ }
+ .shadows_R1 { 
+ box-shadow: 
+   2px 3px 5px 0px rgba(0,0,0,0.4) inset; 
+ /*   -1px -1px 2px 0px rgba(0,0,0,0.58), */
+  /*  1px 1px 2px 0px rgba(255,255,255,0.1) */;
+ }
+ .shadows_R2 { 
+ box-shadow: 
+   3px 2px 5px 0px rgba(0,0,0, 0.45) inset; 
+ /*   -1px -1px 2px 0px rgba(0,0,0,0.58),  */
+ /*   1px 1px 2px 0px rgba(255,255,255,0.3) */  ;
+ }
+ .shadows_R3 { 
+ box-shadow: 
+   4px 2px 5px 0px rgba(0,0,0,0.5) inset; 
+ /*   -1px -1px 2px 0px rgba(0,0,0,0.58),  */
+   /* 1px 1px 2px 0px rgba(255,255,255,0.2) */ ;
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ #controls_wrapper {
+   display: flex;
+   flex-direction: column;
+   justify-content: center; /* (works on height, since column direction) */
+   align-items: center;
+     padding:30px;
+     border:1px solid red;
+ }
+ /* .button { 
+   width:100px; 
+   height:50px;
+   background: midnightblue;
+   color: white;
+   cursor:pointer; 
+ }
+  */
+ 
+ 
+ /* ~~~~~~~ ** END flipIt DEV ** ~~~~~~~~~~~ */
+ 
+ 
+ 
+ .button.flip {
+   position: relative;
+   font-family: 'Raleway', sans-serif;
+   font-size: 2rem;
+   font-weight: 800;
+   text-transform: uppercase;
+   cursor: pointer;
+   background-color: var(--black-15, rgba(100,100,100,0.5) );
+   color: var(--black-10, rgba(100,100,100,0.5) );
+   border-radius: 5px;
+   border-left: 1px solid rgba(79,79,79,0.99);
+   border-top: 1px solid rgba(79,79,79,0.99);
+   border-bottom-color: transparent;
+   border-right-color: transparent;
+   padding: 15px 15px 10px 15px; /* top right bottom left*/
+   margin-bottom: 30px;
+   /* top-left-outside, top-left-inside, bottom-right-inside, bottom-right-outside */ 
+ /*   box-shadow: 2px 2px 3px 1px rgba(0,0,0,0.5); */
+   border:3px solid black; 
+ }
+   
+ .button.flip:hover {
+   background-color: var(--black-10, rgba(10,10,10,0.5) ); 
+   color: var(--black-15, rgba(100,100,100,0.99) );
+ }
+ 
+ .buttons{
+   display:flex;
+   justify-content: center;
+   align-items: flex-start; 
+ }
+ 
+ .button_with_controls{
+   display: flex;  
+   flex-direction: column;
+   align-content: center; 
+   justify-content: center; 
+   transform-origin: bottom left;
+ }
+ 
+ 
+ .rtl {
+   direction: rtl; 
+ }
+ 
+ /* ======================================================= */
+ /* ==================      12 / 24      ================== */
+ /* ==================      H O U R      ================== */
+ /* ==================       CHECK       ================== */
+ /* ==================        BOX        ================== */
+ /* ======================================================= */
+ 
+ /* used for 12/24 mil time switch. 
+ Change name if not used universally */
+ .opacity_5 { 
+   opacity:0.5;
+   transition: opacity 250ms ease-in-out;
+   -moz-transition: opacity 250ms ease-in-out;
+   -webkit-transition: opacity 250ms ease-in-out;
+ }
+ 
+ .message_speed_container, .flip_speed_container {
+   display: flex;
+   justify-content: space-around;
+   margin-top:10px;
+   margin-bottom:30px; /* only because the main label is outside the div wrapper, fix this */
+   margin-left: 0px;
+ }
+ 
+ .message_speed_container span:not(.slip), .flip_speed_container span:not(.slip) {
+   font-family: 'Azeret Mono', monospace;
+   font-size:14px;
+   line-height: 22px;
+   /* filter: blur(0.7px);  */
+   color: var(--black-12);
+ }
+ 
+ 

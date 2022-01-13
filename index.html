@@ -7,32 +7,29 @@
   <meta name="author" content="">
   <meta name="description" content="Tesing animation and timing of flip text element">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="css/index.css" rel="stylesheet">
-  <!-- <link href="css/style.css" rel="stylesheet"> -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@500&display=swap" rel="stylesheet">
-
-
   
+  <!-- Styles -->
+  <link href="css/index.css" rel="stylesheet">
+ 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@500&display=swap" rel="stylesheet">
+  <!-- Scripts -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="js/index.js" defer></script>
 </head>
 <body>
 
-
-
-
-<p>forked from 3, clicking simultaneous elements instead of one at a time</p>
 <!-- On the panel display, wrapps all elements -->
 <div id="display_board_X" class="display_board_container board"> </div> 
 
-<!--  -->
-<div id="pos_1_" class="element  " style="display:none">
+
+<div id="pos_1_" class="element_wrapper " style="display:none">
+<div class="element" >
   <div class="top_back_shadow"></div>
   <!--   box shadow INSide does nothign here, as the .card is in front of it -->
   <h1>
-    <div class="top">7</div>
+    <div class="top shadows_R3">7</div>
     <div class="shadow"></div>
     <div class="hub">
       <div></div>
@@ -42,14 +39,15 @@
   </h1>
 
   <div class="flap ">
-    <div class="front item ">
-      <div class="hub">
+    <div class="front item shadows_R3">
+       <div class="hub"> 
         <div></div>
         <div></div>
       </div>
       <h1>7</h1>
     </div>
     <div class="back">
+      <div class="back_shine"></div>
       <div class="hub">
         <div></div>
         <div></div>
@@ -60,39 +58,57 @@
     </div>    
   </div><!-- end .flap -->
 
-
 </div><!-- END .element flip char item -->
+</div><!-- END .element_wrapper -->
 
 
+<div id="controls_wrapper" class="buttons">
+  <button class="button flip">Flip</button>
 
-<div class="button_row">
-<div class="button one shadow-pulse">Flip single Element</div>
-<div class="button two">Slot Machine Flips</div>
-<div class="button three">Clear Me</div>
-<!-- <div class="button" onclick="flip(event)">.. </div>  -->
-</div>
-<div class="button_row">
-<div class="button four">Reload Page</div>
-</div>
+  
+  <label>Change The Message</label> 
+  <div id="message_speed_wrapper" class="button_with_controls">
+ 
+        <div id="military_slider_container" class="message_speed_container">
+          <span class="slower">slower</span>
+          <label class="switch">
+      <!-- <input type="checkbox" id="military_time_switch"> -->
+            <input type="range" min="10" max="3000" value="500" class="slider rtl" id="message_speed_slider">
+            <span class="slip round"> </span>
+          </label><span class="faster ">faster</span>
+        </div><!-- military slider -->
+      </div><!-- button_with_controls -->
+  
+  
+  <label>Complete The Flip</label> 
+  <div id="flip_speed_wrapper" class="button_with_controls">
 
+        <div id="military_slider_container" class="flip_speed_container"><span class="slower">slower</span>
+          <label class="switch">
+      <!-- <input type="checkbox" id="military_time_switch"> -->
+            <input type="range" min="20" max="300" value="60" class="slider rtl" id="flip_speed_slider">
+            <span class="slip round"> </span>
+          </label><span class="faster">faster</span>
+        </div><!-- military slider -->
+      </div><!-- button_with_controls -->
 
-<em>Working Decently. But sequencial instead of asynchronosly? 
-</em>
-<p> investigate rounding the corners, panels are too sharp on transition
-</p>
+</div><!-- control wrapper -->
+<br><br><br><br><br><br><br><br>
 
-<p> .back { border-bottom: 1px solid white; <<==animate this so it's like a gleaming edge </br>
-</p>
+<p>Pull data from some public API.  Add grain/stippling to the metal texture</p>
+<p>https://codepen.io/adamrasheed/pen/zeovLJ?editors=1010</p>
 
-<p>showing of the 'back' as the 'front' flips down is not working in Safari
-</p>
+<p>https://learn.vonage.com/blog/2021/03/15/the-ultimate-list-of-fun-apis-for-your-next-coding-project/</p>
 
-<p>change @shine keyframes to slightly delay the start, and speed up toward the end
-</p>
+<p>Yahoo FInance stock data API</p>
+<p>https://codepen.io/NewHighScore/pen/BKxxVJ?editors=1011</p>
+<p>https://medium.com/justinctollison/using-javascript-fetch-to-grab-yahoo-finance-api-949fd24876c9</p>
+<p>https://www.titanwolf.org/Network/q/2b5d8e37-797a-4325-bba7-a14acb230ef2/y</p>
+<p>http://jsfiddle.net/asgallant/dSWe7/</p>
 
-<div class=" " style="width: 800px; height:200px; background-image: url(https://www.oatfoundry.com/wp-content/uploads/2019/10/IPL_200919_3629_LR.jpg);"></div> 
+<h2>Random Flicker with css var via js</h2>
+<p>https://css-tricks.com/random-numbers-css/</p>
 
-<script src="js/index.js"></script>
-
+<div class=" " style="width: 800px; height:200px; margin-top:800px; background-image: url(https://www.oatfoundry.com/wp-content/uploads/2019/10/IPL_200919_3629_LR.jpg);"></div> 
 
 </body>
