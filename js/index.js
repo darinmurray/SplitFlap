@@ -12,7 +12,7 @@ $(".button.one").click(function() {
  
 
 
-window.total_characters = 7
+window.total_characters = 6
 step = 0
 
 function activateFlip( stringy) { 
@@ -162,8 +162,8 @@ setTimeout(function ( ) {
 
 
 $( ".button.two" ).click(function() { 
-  strings = ["TESTING","DARIN MURRAY","ERIN MORRIS","PIPER MAE","LUCKY DOG","KITTEN THE CAT"]
-   flipText(strings[getRandomInt(0, 5)]);
+  strings = ["DADA  ","ERIN MORRIS","PIPER MAE","LUCKY DOG","KITTEN THE CAT"]
+   flipText(strings[getRandomInt(0, 4)]);
  });  
 
 $( ".button.three" ).click(function() { 
