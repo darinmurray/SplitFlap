@@ -18,5 +18,5 @@
 No images are used (except for the screenshots in this readMe). 
 </p>
 <p align="center">
-Everything is completely created with HTML/CSS/Jquery-Javascript.
+Rendered in CSS with JS controls for triggering the flip, changing the character and animating timing (via :root --variable) in CSS
 </p>
