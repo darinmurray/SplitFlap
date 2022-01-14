@@ -1,11 +1,22 @@
-# flip-text-single-element
- Testing element animation for retro flip board. 
+<h1 align="center" style="border-bottom:none;"> Pure CSS Split Flap Display </h1>
+<p align="center">
+  <img src="images/read-me-images/splitFlap.png">
+</p>
+<p align="center">
+  Developed for a fullscreen display board with controls.
+</p>
 
-The large board and message editing is ready for use.
-This is to develop and refine the timing and animation of the flip characters
+<p align="center">
+  <img src="images/read-me-images/splitFlap-turning-a.png">
+</p>
 
-Working as well as can be expected in it's current state. 
+<p align="center">
+  <img src="images/read-me-images/splitFlap-turning-b.png">
+</p>
 
-Time to strip it down to bare bones and get the synch/animation working as desired
-Yes, I should have started with that in the first place, but the initial objective was different. 
-
+<p align="center">
+No images are used (except for the screenshots in this readMe). 
+</p>
+<p align="center">
+Everything is completely created with HTML/CSS/Jquery-Javascript.
+</p>

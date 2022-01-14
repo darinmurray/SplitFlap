@@ -2,7 +2,7 @@
 // Fired when document is ready, wrapps everything  
 window.onload = function() { 
  
-  window.total_characters = 8
+  window.total_characters = 5
     
    
   // ===============  S P E E D  ================ // 
@@ -96,7 +96,7 @@ window.onload = function() {
   });  
   
   function getString(){
-  let strings = ["DADA IS THE BEST!!","ERIN MORRIS, DANCING QUEEN IS IN CALIFORNIA VISITING HER DADA ","PIPER MAE LOVES PINK :-)","LUCKY DOG IS REALLY A LUCKY DOG AND GETS","KITTEN THE CAT LIKES TO GET UP EARLY"]
+  let strings = ["DARIN ","RETRO, DARIN","PIPER","LUCKY","DARIN"]
   
   // let strings = ["DADA IS THE BEST DADA!!","ERIN MORRIS, DANCING QUEEN IS IN CALIFORNIA VISITING HER DADA ","PIPER MAE LOVES PINK AND UNICORNS AND AND FLUFFY THINGS OF ALL KINDS","LUCKY DOG IS REALLY A LUCKY DOG AND GETS TO SLEEP IN THE BED","KITTEN THE CAT LIKES TO GET UP EARLY AND WAKE US UP FOR BREAKFAST"]
   
