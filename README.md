@@ -8,3 +8,4 @@ Working as well as can be expected in it's current state.
 
 Time to strip it down to bare bones and get the synch/animation working as desired
 Yes, I should have started with that in the first place, but the initial objective was different. 
+

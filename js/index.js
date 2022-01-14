@@ -2,7 +2,7 @@
 // Fired when document is ready, wrapps everything  
 window.onload = function() { 
  
-  window.total_characters = 36
+  window.total_characters = 8
     
    
   // ===============  S P E E D  ================ // 
