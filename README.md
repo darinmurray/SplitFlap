@@ -1,4 +1,4 @@
-<h1 align="center" style="border-bottom:none;"> Pure CSS Split Flap Display </h1>
+<h1 align="center" style="border-bottom:none;"> Pure CSS Split Flap Display </h1> 
 <p align="center">
   <img src="images/read-me-images/splitFlap.png">
 </p>
