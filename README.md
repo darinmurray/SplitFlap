@@ -18,5 +18,5 @@
 No images are used (except for the screenshots in this readMe). 
 </p>
 <p align="center">
-Rendered in CSS with JS controls for triggering the flip, changing the character and animating timing (via :root --variable) in CSS
+Rendered in CSS with JS controls for triggering the flip, changing the character and animating timing.
 </p>
